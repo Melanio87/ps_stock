@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rep_ventas" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8964859a-90cb-47ed-b610-ae7db3bfce68">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="33"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="fecI" class="java.util.Date"/>
+	<parameter name="fecF" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[select ven_codigo,ven_fecha,ven_hora,ven_codven,acc_nombre,itv_codpro,pro_descri,
+itv_canti,itv_precio,ven_total,pro_pre1,(itv_canti * pro_pre1) as ven_cosTot,ven_cliente,case when cli_nombre is null then 'Ocacional' else cli_nombre end,case when ven_tipo=0 then 'CONTADO' else 'CREDITO' end as ven_tipo,ven_obs,avt_fecha,avt_hora,avt_codusu,avt_numven,avt_motivo,
+case when ven_numfac ='null' then '' else ven_numfac end as ven_numfac
+from ventas left join clientes cli on cli.cli_codigo = ventas.ven_cliente,item_ventas,productos,acceso,anuvent
+where pro_codigo=itv_codpro and ven_codigo=itv_codven
+and acc_id=ven_codven and ven_fecha >= $P{fecI} and ven_fecha <= $P{fecF} and ven_codigo=itv_codven and ven_situ=0 and avt_numven=ven_codigo order by ven_codigo]]>
+	</queryString>
+	<field name="ven_codigo" class="java.lang.Integer"/>
+	<field name="ven_fecha" class="java.sql.Date"/>
+	<field name="ven_hora" class="java.lang.String"/>
+	<field name="ven_codven" class="java.lang.Integer"/>
+	<field name="acc_nombre" class="java.lang.String"/>
+	<field name="itv_codpro" class="java.lang.Integer"/>
+	<field name="pro_descri" class="java.lang.String"/>
+	<field name="itv_canti" class="java.math.BigDecimal"/>
+	<field name="itv_precio" class="java.math.BigDecimal"/>
+	<field name="ven_total" class="java.math.BigDecimal"/>
+	<field name="pro_pre1" class="java.math.BigDecimal"/>
+	<field name="ven_costot" class="java.math.BigDecimal"/>
+	<field name="ven_cliente" class="java.lang.Integer"/>
+	<field name="cli_nombre" class="java.lang.String"/>
+	<field name="ven_tipo" class="java.lang.String"/>
+	<field name="ven_obs" class="java.lang.String"/>
+	<field name="avt_fecha" class="java.sql.Date"/>
+	<field name="avt_hora" class="java.lang.String"/>
+	<field name="avt_codusu" class="java.lang.Integer"/>
+	<field name="avt_numven" class="java.lang.Integer"/>
+	<field name="avt_motivo" class="java.lang.String"/>
+	<field name="ven_numfac" class="java.lang.String"/>
+	<variable name="ven_total_1" class="java.math.BigDecimal" resetType="Group" resetGroup="PorNumeroVentas" calculation="Sum">
+		<variableExpression><![CDATA[$F{ven_total}]]></variableExpression>
+	</variable>
+	<variable name="ven_total_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{ven_total}]]></variableExpression>
+	</variable>
+	<variable name="ven_costot_1" class="java.math.BigDecimal" resetType="Group" resetGroup="PorNumeroVentas" calculation="Sum">
+		<variableExpression><![CDATA[$F{ven_costot}]]></variableExpression>
+	</variable>
+	<variable name="ven_costot_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{ven_costot}]]></variableExpression>
+	</variable>
+	<variable name="Ganancias" class="java.lang.Double">
+		<variableExpression><![CDATA[($V{ven_total_2}.doubleValue() - $V{ven_costot_2}.doubleValue())]]></variableExpression>
+	</variable>
+	<group name="PorNumeroVentas">
+		<groupExpression><![CDATA[$F{ven_codigo}]]></groupExpression>
+		<groupHeader>
+			<band height="56">
+				<staticText>
+					<reportElement x="0" y="5" width="62" height="20" uuid="a8c2277e-7b3d-4728-b391-61370c169cc8"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[VENTA N°:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="24" width="293" height="1" uuid="6aad1fb5-fd29-44f4-a74b-d86d885bea59"/>
+				</line>
+				<textField>
+					<reportElement x="62" y="5" width="100" height="20" uuid="43e104db-3213-49bf-be81-96cdd53a89f8"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ven_codigo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="2" y="30" width="68" height="20" uuid="f0a62592-9675-485c-bdc4-cc9cf772ddb5"/>
+					<textElement>
+						<font size="13" isBold="true"/>
+					</textElement>
+					<text><![CDATA[MOTIVO:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="70" y="30" width="732" height="20" uuid="bfb9c3c4-fddf-43a1-9655-729bf5edcac5"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{avt_motivo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="403" y="5" width="399" height="20" uuid="38e5eb10-f737-4dcf-88b4-08febe5fac67"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{acc_nombre}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="341" y="5" width="62" height="20" uuid="75d14d99-35fb-45be-866a-71633cedd408"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[USUARIO:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="2" y="52" width="800" height="1" uuid="538ed0ae-3c1a-4349-a064-700235dffcd9"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="37"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="44" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="11" width="802" height="20" forecolor="#009933" uuid="718ccaed-cf2e-4fcb-9bef-4d1de4bdce02"/>
+				<textElement textAlignment="Center">
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INFORME DE VENTAS POR FECHA ANULADAS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="15" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="12" width="51" height="20" uuid="dbdea56f-6fe3-4804-b86f-85123e46d3e0"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="13" width="55" height="20" uuid="d07b2514-6065-4398-9891-7c7b64d88444"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HORA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="13" width="76" height="20" uuid="0bc7b454-7e32-40bc-834d-85deda0d1e8f"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TIPO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="46" width="802" height="1" uuid="ea4ce134-0841-447f-a600-4a70bc5faae9"/>
+			</line>
+			<line>
+				<reportElement x="0" y="2" width="802" height="1" uuid="96ec02b9-db6e-4ed2-bd42-060d1634b4e3"/>
+			</line>
+			<staticText>
+				<reportElement x="201" y="13" width="100" height="20" uuid="30a03760-e55e-4c2c-9c9e-79e9a5e1feb5"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRODUCTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="461" y="14" width="68" height="20" uuid="2caaee50-0a10-422e-b255-bbbbae97032c"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CANTIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="532" y="5" width="99" height="41" uuid="26419c9e-e2db-473f-9a0a-430349772a4d"/>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA DE ANULACION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="632" y="14" width="100" height="20" uuid="779e6255-f690-476d-8046-505a74419803"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº FACTURA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="0" y="3" width="70" height="20" uuid="390f8fd4-876f-41bb-90b2-4c824a42605e"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ven_fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="3" width="55" height="20" uuid="25c469e4-cd1a-4641-bb48-cf4b65184f46"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ven_hora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="125" y="3" width="76" height="20" uuid="e666a24e-8705-40ad-8e36-9efa3ebc7582"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ven_tipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="204" y="3" width="260" height="20" uuid="8330c747-9400-4b36-95ec-4c64c8760265"/>
+				<textElement textAlignment="Left">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{itv_codpro}+"-"+$F{pro_descri}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="464" y="3" width="68" height="20" uuid="903eaf7b-92dd-4f03-988c-4de0e1849288"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{itv_canti}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="532" y="3" width="100" height="20" uuid="414c9818-efc6-411a-80e2-1d6914d4d32b"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ven_fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="632" y="3" width="100" height="20" uuid="60d23ee7-793b-4407-a438-d124b42c8843"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ven_numfac}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="78" splitType="Stretch"/>
+	</summary>
+</jasperReport>

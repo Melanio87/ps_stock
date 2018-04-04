@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BarCodePro" columnCount="4" pageWidth="612" pageHeight="789" columnWidth="125" columnSpacing="10" leftMargin="41" rightMargin="41" topMargin="36" bottomMargin="36" uuid="6916f100-9cbf-4fe7-aa86-e3285665f611">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="codpro" class="java.lang.Integer"/>
+	<field name="despro" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="36" splitType="Stretch">
+			<componentElement>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="3" width="124" height="31" isRemoveLineWhenBlank="true" uuid="c2d9e82e-637e-49d7-84f9-ec621e66f4e0"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128A" drawText="true" checksumRequired="false" barWidth="0" barHeight="0">
+					<jr:codeExpression><![CDATA["000"+$F{codpro}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="71" y="3" width="53" height="31" uuid="8bf4e51f-5ac4-4b28-b181-f4557cbd2501"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{despro}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

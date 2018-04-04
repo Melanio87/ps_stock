@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fac_legal1" pageWidth="595" pageHeight="595" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2cd5fe52-b43a-49d1-b207-eefe4e076bda">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="NUMVEN" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select ven_codigo,ven_fecha,ven_hora,ven_codven,acc_nombre,itv_codpro,pro_descri,pro_iva,
+itv_canti,itv_precio,ven_total,ven_cliente,case when cli_nombre is null then 'Ocacional' else cli_nombre end,cli_ruc ,ven_tipo,ven_obs,(itv_canti*itv_precio) as stot,
+emp_codigo,emp_nombre,emp_descri,emp_direc,emp_tele,emp_ruc,emp_timbrado,emp_facvalidez,(to_char(emp_numfac1, 'FM999099')||'-'||to_char(emp_numfac2, 'FM999099')||'-'||to_char(emp_numfac3, 'FM9990999999')) AS numfac,
+(ven_total/11) as totiva, (ven_total/1.1) as totgrav,ven_numfac,cli_direc,cli_tel,ven_totlet
+from ventas left join clientes cli on cli.cli_codigo = ventas.ven_cliente,item_ventas,productos,acceso,empresa
+where pro_codigo=itv_codpro and ven_codigo=itv_codven
+and acc_id=ven_codven and ven_codigo=$P{NUMVEN}]]>
+	</queryString>
+	<field name="ven_codigo" class="java.lang.Integer"/>
+	<field name="ven_fecha" class="java.sql.Date"/>
+	<field name="ven_hora" class="java.lang.String"/>
+	<field name="ven_codven" class="java.lang.Integer"/>
+	<field name="acc_nombre" class="java.lang.String"/>
+	<field name="itv_codpro" class="java.lang.Integer"/>
+	<field name="pro_descri" class="java.lang.String"/>
+	<field name="pro_iva" class="java.math.BigDecimal"/>
+	<field name="itv_canti" class="java.math.BigDecimal"/>
+	<field name="itv_precio" class="java.math.BigDecimal"/>
+	<field name="ven_total" class="java.math.BigDecimal"/>
+	<field name="ven_cliente" class="java.lang.Integer"/>
+	<field name="cli_nombre" class="java.lang.String"/>
+	<field name="cli_ruc" class="java.lang.String"/>
+	<field name="ven_tipo" class="java.lang.Integer"/>
+	<field name="ven_obs" class="java.lang.String"/>
+	<field name="stot" class="java.math.BigDecimal"/>
+	<field name="emp_codigo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[
+]]></fieldDescription>
+	</field>
+	<field name="emp_nombre" class="java.lang.String"/>
+	<field name="emp_descri" class="java.lang.String"/>
+	<field name="emp_direc" class="java.lang.String"/>
+	<field name="emp_tele" class="java.lang.String"/>
+	<field name="emp_ruc" class="java.lang.String"/>
+	<field name="emp_timbrado" class="java.lang.Integer"/>
+	<field name="emp_facvalidez" class="java.sql.Date"/>
+	<field name="numfac" class="java.lang.String"/>
+	<field name="totiva" class="java.math.BigDecimal"/>
+	<field name="totgrav" class="java.math.BigDecimal"/>
+	<field name="ven_numfac" class="java.lang.String"/>
+	<field name="cli_direc" class="java.lang.String"/>
+	<field name="cli_tel" class="java.lang.String"/>
+	<field name="ven_totlet" class="java.lang.String"/>
+	<variable name="variable1" class="java.lang.String"/>
+	<variable name="itv_precio_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{itv_precio}]]></variableExpression>
+	</variable>
+	<title>
+		<band height="108" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="60" splitType="Stretch">
+			<textField pattern="dd" isBlankWhenNull="true">
+				<reportElement x="57" y="5" width="31" height="13" uuid="df56c59f-3e64-4ddc-9acf-ca4f4c458d56"/>
+				<textFieldExpression><![CDATA[$F{ven_fecha}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM">
+				<reportElement x="100" y="5" width="151" height="13" uuid="773e06fc-6a57-4147-a535-b647b50187cd"/>
+				<textFieldExpression><![CDATA[$F{ven_fecha}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yy">
+				<reportElement x="279" y="6" width="45" height="13" uuid="5f4c0ad1-0765-41eb-8487-2d92243707c1"/>
+				<textFieldExpression><![CDATA[$F{ven_fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="60" y="24" width="344" height="13" uuid="4cca19a2-1483-452a-b1d1-0b3b708b87ef"/>
+				<textFieldExpression><![CDATA[$F{cli_nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="457" y="24" width="100" height="13" uuid="5b263836-5c63-47a3-83dd-118472eedbf4"/>
+				<textFieldExpression><![CDATA[$F{cli_ruc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="71" y="45" width="178" height="13" uuid="d5f1955a-71c8-4db4-89df-cb7820fdc51a"/>
+				<textFieldExpression><![CDATA[$F{cli_direc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="264" y="45" width="127" height="13" uuid="e2766d19-d9b5-42f5-94b5-9912296f6926"/>
+				<textFieldExpression><![CDATA[$F{cli_tel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="469" y="5" width="88" height="13" uuid="0371e0e8-2795-4479-97bf-36386a676c0d"/>
+				<textFieldExpression><![CDATA[$F{ven_tipo}.intValue() == 0 ? "X" : "X"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Immediate">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="45" height="13" uuid="4c8342ac-940a-4669-ac00-d3a6b2ed5c7b"/>
+				<textFieldExpression><![CDATA[$F{itv_canti}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="45" y="0" width="248" height="13" uuid="e9770693-1737-465c-b6f4-f8c5e517039a"/>
+				<textFieldExpression><![CDATA[$F{pro_descri}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="0" width="57" height="13" uuid="7387ce4c-00fd-4c99-a4d0-cff5fe6fcd38"/>
+				<textFieldExpression><![CDATA[$F{itv_precio}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="350" y="0" width="68" height="13" uuid="215962f9-75a3-4bb6-9dc9-62078e4497a4"/>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="418" y="0" width="68" height="13" uuid="7f6cafc9-c1df-42f4-970d-1ada45bb653f"/>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="487" y="0" width="68" height="13" uuid="5687f0e9-be49-42b5-a4b7-5c174481912e"/>
+				<textFieldExpression><![CDATA[new Double($F{itv_precio}.doubleValue() *$F{itv_canti}.doubleValue())]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="105" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement x="469" y="47" width="86" height="20" uuid="063790ac-a2f1-47a4-90a2-64a23fa63d46"/>
+				<textFieldExpression><![CDATA[$F{ven_total}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="389" y="72" width="78" height="20" uuid="e92a3544-7e29-4f57-a72f-fa3187ff5aad"/>
+				<textFieldExpression><![CDATA[$F{totiva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="250" y="72" width="100" height="20" uuid="de6a4d6f-c449-4669-a8f9-6ce47fbf7209"/>
+				<textFieldExpression><![CDATA[$F{totgrav}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="487" y="16" width="68" height="20" uuid="32ada806-bf63-4966-b7cf-46fba48ac32e"/>
+				<textFieldExpression><![CDATA[$F{ven_total}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="36" width="369" height="20" uuid="0b9847b8-0c69-4d72-a948-6e7dcbe38e5c"/>
+				<textFieldExpression><![CDATA[$F{ven_totlet}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>
